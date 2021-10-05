@@ -8,7 +8,8 @@ import { Route, Switch } from 'react-router-dom'
 import Header from './components/layouts/header/header.component';
 import SignInAndSignUpPage from './pages/account/auth/sign-in-and-sign-up.component';
 
-import { auth } from './firebase/firebase.utils'
+import { auth, createUserProfileDocument } from './firebase/firebase.utils'
+import { onSnapshot } from "firebase/firestore";
 
 class App extends React.Component {
 
@@ -24,16 +25,35 @@ class App extends React.Component {
 
   // FetchDate on Mount
   componentDidMount() {
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(user => {
-      this.setState({currentUser : user});
-      // console.log(user)
+    // Kiểm tra user đăng nhập bằng Google userAuth
+    this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+      // Truong hop co ton tai
+      if (userAuth) {
+        // Lay userRef nhan userRef tra ve tu ham Create
+        const userRef = await createUserProfileDocument(userAuth);
+        // Kiem tra snapshot va ghi du lieu
+        const unsub = onSnapshot(userRef, (doc) => {
+          this.setState({
+            currentUser: {
+              id: doc.id,
+              ...doc.data()
+            },
+          },() => {
+            console.log(this.state.currentUser)
+          });
+        });
+      } else {
+          this.setState({
+            currentUser : userAuth
+          })
+      }
     })
   }
 
   componentWillUnmount() {
     this.unsubscribeFromAuth();
   }
-  
+
 
   render() {
     return (
