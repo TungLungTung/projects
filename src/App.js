@@ -32,14 +32,14 @@ class App extends React.Component {
         // Lay userRef nhan userRef tra ve tu ham Create
         const userRef = await createUserProfileDocument(userAuth);
         // Kiem tra snapshot va ghi du lieu
-        const unsub = onSnapshot(userRef, (doc) => {
+        onSnapshot(userRef, (doc) => {
           this.setState({
             currentUser: {
               id: doc.id,
               ...doc.data()
             },
           },() => {
-            console.log(this.state.currentUser)
+            // console.log('Current User',this.state.currentUser)
           });
         });
       } else {
@@ -54,8 +54,11 @@ class App extends React.Component {
     this.unsubscribeFromAuth();
   }
 
+  
 
   render() {
+    // const {currentUser} = this.state;
+    // console.log(currentUser);
     return (
       <div>
         <Header currentUser={this.state.currentUser} />

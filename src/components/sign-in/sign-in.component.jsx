@@ -2,6 +2,8 @@ import React from "react";
 import FormInput from '../form-input/form-input.component'
 import CustomButton from "../custom-button/custom-button.component";
 import { signInWithGoogle } from '../../firebase/firebase.utils.js'
+import { auth } from '../../firebase/firebase.utils'
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 class SignIn extends React.Component {
     constructor(props) {
@@ -12,9 +14,21 @@ class SignIn extends React.Component {
         }
     }
 
-    handleSubmit = (event) => {
+    handleSubmit = async (event) => {
         event.preventDefault();
 
+        const {email,password} = this.state;
+        console.log(email,password)
+        await signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                // Signed in 
+                const user = userCredential.user;
+                // ...
+                console.log(user);
+              })
+              .catch((error) => {
+                console.log(error.message)
+              });
         this.setState({ email: '', password: '' })
     }
 
@@ -49,7 +63,7 @@ class SignIn extends React.Component {
                     />
                     {/* Co the dung children props la nhung cai ben trong cua Component */}
                     <div className='sign-in-button-holder'>
-                        <CustomButton type='submit' value='Sign in' />
+                        <CustomButton onClick={this.handleSubmit} type='submit' value='Sign in' />
                         <CustomButton onClick={signInWithGoogle} value='Login with Google' btnGoogleSignIn='true' />
                     </div>
                 </form>

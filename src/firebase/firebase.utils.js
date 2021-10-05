@@ -25,9 +25,6 @@ export const firestore = getFirestore();
 
 // Ham nay tao user neu khach hang dang nhap bang Google
 export const createUserProfileDocument = async (userAuth, additionalData) => {
-
-    console.log(userAuth.uid);
-
     // Neu user chua dang nhap hoac khong tona tai thi ko lam gi
     if (!userAuth) return;
 
@@ -39,10 +36,10 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
     // Nếu tồn tại thì không làm gì cả
     // Nếu không tồn tại thì bắt đầu thêm vào dữ liệu users
     if (snapShot.exists()) {
-        console.log("Document data:", snapShot.data());
+        // console.log("Document data:", snapShot.data());
     } else {
         // doc.data() will be undefined in this case
-        console.log("No such document!");
+        // console.log("No such document!");
         const {displayName,email} = userAuth;
         const createdAt = new Date();
 
