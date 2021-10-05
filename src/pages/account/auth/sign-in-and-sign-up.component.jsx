@@ -7,7 +7,6 @@ import SignUp from '../../../components/sign-up/sign-up.component'
 const SignInAndSignUpPage = () => {
     
     const [isLogin, setIsLogin] = useState(true);
-
     const changeIsLogInState = () => {
         setIsLogin(!isLogin)
     }

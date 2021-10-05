@@ -30,6 +30,7 @@ class SignIn extends React.Component {
                 <h2>or Sign in with your exist account</h2>
                 <form>
                     <FormInput
+                        type='text'
                         name='email'
                         value={this.state.email}
                         required
@@ -38,6 +39,7 @@ class SignIn extends React.Component {
                         placeholder='Enter your email'
                     />
                     <FormInput
+                        type='password'
                         name='password'
                         value={this.state.password}
                         required
