@@ -1,6 +1,7 @@
 import React from "react";
 import FormInput from '../form-input/form-input.component'
 import CustomButton from "../custom-button/custom-button.component";
+import { signInWithGoogle } from '../../firebase/firebase.utils.js'
 
 class SignIn extends React.Component {
     constructor(props) {
@@ -14,12 +15,12 @@ class SignIn extends React.Component {
     handleSubmit = (event) => {
         event.preventDefault();
 
-        this.setState({email: '', password: ''})
+        this.setState({ email: '', password: '' })
     }
 
     handleChange = (event) => {
-        const {value,name} = event.target;
-        this.setState({[name] : value})
+        const { value, name } = event.target;
+        this.setState({ [name]: value })
     }
 
     render() {
@@ -31,7 +32,7 @@ class SignIn extends React.Component {
                     <FormInput
                         name='email'
                         value={this.state.email}
-                        required 
+                        required
                         label='Email'
                         handleChange={this.handleChange}
                         placeholder='Enter your email'
@@ -39,13 +40,16 @@ class SignIn extends React.Component {
                     <FormInput
                         name='password'
                         value={this.state.password}
-                        required 
+                        required
                         label='Password'
                         handleChange={this.handleChange}
                         placeholder='Enter your password'
                     />
                     {/* Co the dung children props la nhung cai ben trong cua Component */}
-                    <CustomButton type='submit' value='Sign in' />
+                    <div className='sign-in-button-holder'>
+                        <CustomButton type='submit' value='Sign in' />
+                        <CustomButton onClick={signInWithGoogle} value='Login with Google' btnGoogleSignIn='true' />
+                    </div>
                 </form>
             </div>
 
