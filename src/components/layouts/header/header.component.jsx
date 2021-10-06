@@ -7,7 +7,10 @@ import './header.styles.scss'
 import {ReactComponent as Logo} from '../../../assets/crown.svg'
 import {auth} from '../../../firebase/firebase.utils'
 
-const Header = ({currentUser}) => {
+import CartIcon from "../../icons/cart-icon/cart-icon.component";
+import CartDropdown from "../../cart-dropdown/cart-dropdown.component";
+
+const Header = ({currentUser, hidden}) => {
     return (
         <div className='header'>
             {/* Header */}
@@ -23,7 +26,13 @@ const Header = ({currentUser}) => {
                     :
                     <Link className='option' to='/signin'>SIGN IN</Link>
                 }
+                <CartIcon />
             </div>
+            {
+                hidden ?
+                null :
+                (<CartDropdown />)
+            }
         </div>
     );
 }
@@ -34,9 +43,10 @@ const Header = ({currentUser}) => {
 // })
 
 // Thay vi viet nhu tren co the viet
-const mapStateToProps = (state) => {
+const mapStateToProps = ({user:{currentUser}, cart: {hidden}}) => {
     return ({
-        currentUser: state.user.currentUser   
+        currentUser,
+        hidden
     })
 }
  
