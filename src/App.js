@@ -23,6 +23,8 @@ class App extends React.Component {
   // De bo chon cai Auth khi thoat
   unsubscribeFromAuth = null;
 
+  unsub = null
+
   // FetchDate on Mount
   componentDidMount() {
     // Kiểm tra user đăng nhập bằng Google userAuth
@@ -32,7 +34,7 @@ class App extends React.Component {
         // Lay userRef nhan userRef tra ve tu ham Create
         const userRef = await createUserProfileDocument(userAuth);
         // Kiem tra snapshot va ghi du lieu
-        onSnapshot(userRef, (doc) => {
+        this.unsub = onSnapshot(userRef, (doc) => {
           this.setState({
             currentUser: {
               id: doc.id,
