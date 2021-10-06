@@ -2,19 +2,23 @@ import './App.css';
 
 import React from 'react';
 import {connect} from 'react-redux'
+import { createStructuredSelector } from 'reselect'
+import { Route, Switch, Redirect } from 'react-router-dom'
 
 import HomePage from './pages/homepage/homepage.component';
 import NotFound404 from './pages/_404/_404.component';
 import ShopPage from './pages/shop/shop.components'
-import { Route, Switch, Redirect } from 'react-router-dom'
+
 import Header from './components/layouts/header/header.component';
 import SignInAndSignUpPage from './pages/account/auth/sign-in-and-sign-up.component';
+import CheckoutPage from './pages/checkout/checkout.component';
 
 import { auth, createUserProfileDocument } from './firebase/firebase.utils'
 import { onSnapshot } from "firebase/firestore";
 
 // Redux
 import {setCurrentUser} from './redux/user/user.actions'
+import { selectCurrentUser} from './redux/user/user.selectors'
 
 class App extends React.Component {
 
@@ -75,7 +79,14 @@ class App extends React.Component {
           {/* Exact la luc nao cung phai co o trang chu */}
           <Route exact path='/' component={HomePage} />
           <Route path='/shop' component={ShopPage} />
-          <Route exact path='/signin' render={(props) => this.props.currentUser ? (<Redirect to='/' />) : (<SignInAndSignUpPage />)} />
+          <Route exact path='/checkout' component={CheckoutPage} />
+          <Route
+            exact
+            path='/signin'
+            render={(props) => this.props.currentUser ? 
+            (<Redirect to='/' />) : 
+            (<SignInAndSignUpPage />)} 
+          />
           <Route path="*">
             <NotFound404 />
           </Route>
@@ -87,8 +98,12 @@ class App extends React.Component {
 
 }
 
-const mapStateToProps = ({user}) => ({
-  currentUser: user.currentUser,
+// const mapStateToProps = ({user}) => ({
+//   currentUser: user.currentUser,
+// })
+
+const mapStateToProps = createStructuredSelector({
+  currentUser : selectCurrentUser,
 })
 
 const mapDispatchProps = dispatch => ({

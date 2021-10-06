@@ -2,6 +2,9 @@ import { Link } from "react-router-dom";
 // De su dung redux trong component
 import {connect} from 'react-redux'
 
+import { createStructuredSelector } from 'reselect'
+
+
 import './header.styles.scss'
 
 import {ReactComponent as Logo} from '../../../assets/crown.svg'
@@ -9,6 +12,8 @@ import {auth} from '../../../firebase/firebase.utils'
 
 import CartIcon from "../../icons/cart-icon/cart-icon.component";
 import CartDropdown from "../../cart-dropdown/cart-dropdown.component";
+import { selectCartHidden } from '../../../redux/cart/cart.selectors'
+import { selectCurrentUser} from '../../../redux/user/user.selectors'
 
 const Header = ({currentUser, hidden}) => {
     return (
@@ -43,11 +48,24 @@ const Header = ({currentUser, hidden}) => {
 // })
 
 // Thay vi viet nhu tren co the viet
-const mapStateToProps = ({user:{currentUser}, cart: {hidden}}) => {
-    return ({
-        currentUser,
-        hidden
-    })
-}
+// const mapStateToProps = ({user:{currentUser}, cart: {hidden}}) => {
+//     return ({
+//         currentUser,
+//         hidden
+//     })
+// }
  
+// const mapStateToProps = (state) => {
+//     return ({
+//         currentUser : selectCurrenUser(state),
+//         hidden: selectCartHidden(state)
+//     })
+// }
+
+// hoac
+const mapStateToProps = createStructuredSelector({
+    currentUser : selectCurrentUser,
+    hidden: selectCartHidden
+})
+
 export default connect(mapStateToProps)(Header);
