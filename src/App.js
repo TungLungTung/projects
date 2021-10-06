@@ -1,6 +1,8 @@
 import './App.css';
 
 import React from 'react';
+import {connect} from 'react-redux'
+
 import HomePage from './pages/homepage/homepage.component';
 import NotFound404 from './pages/_404/_404.component';
 import ShopPage from './pages/shop/shop.components'
@@ -11,22 +13,29 @@ import SignInAndSignUpPage from './pages/account/auth/sign-in-and-sign-up.compon
 import { auth, createUserProfileDocument } from './firebase/firebase.utils'
 import { onSnapshot } from "firebase/firestore";
 
+// Redux
+import {setCurrentUser} from './redux/user/user.actions'
+
 class App extends React.Component {
 
-  constructor() {
-    super();
-    this.state = {
-      currentUser: null
-    }
-  }
+  // // Neu su dung redux thi khong can state o constructoer nua
+  // constructor() {
+  //   super();
+  //   this.state = {
+  //     currentUser: null
+  //   }
+  // }
 
   // De bo chon cai Auth khi thoat
   unsubscribeFromAuth = null;
-
   unsub = null
 
   // FetchDate on Mount
   componentDidMount() {
+
+    // Redux
+    const {setCurrentUser} = this.props;
+
     // Kiểm tra user đăng nhập bằng Google userAuth
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
       // Truong hop co ton tai
@@ -35,19 +44,15 @@ class App extends React.Component {
         const userRef = await createUserProfileDocument(userAuth);
         // Kiem tra snapshot va ghi du lieu
         this.unsub = onSnapshot(userRef, (doc) => {
-          this.setState({
-            currentUser: {
-              id: doc.id,
-              ...doc.data()
-            },
-          },() => {
+          setCurrentUser({
+            id: doc.id,
+            ...doc.data()
+          }, () => {
             // console.log('Current User',this.state.currentUser)
           });
         });
       } else {
-          this.setState({
-            currentUser : userAuth
-          })
+        setCurrentUser(userAuth);
       }
     })
   }
@@ -56,14 +61,14 @@ class App extends React.Component {
     this.unsubscribeFromAuth();
   }
 
-  
+
 
   render() {
     // const {currentUser} = this.state;
     // console.log(currentUser);
     return (
       <div>
-        <Header currentUser={this.state.currentUser} />
+        <Header />
         {/* localhost:3000/hats */}
         {/* Ben trong Switch thi khi ma match path thi chi co render 1 components thoi */}
         <Switch>
@@ -82,4 +87,12 @@ class App extends React.Component {
 
 }
 
-export default App;
+const mapDispatchProps = dispatch => ({
+  setCurrentUser: user => dispatch(setCurrentUser(user))
+})
+
+
+export default connect(
+  null,
+  mapDispatchProps
+)(App);

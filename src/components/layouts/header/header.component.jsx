@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+// De su dung redux trong component
+import {connect} from 'react-redux'
 
 import './header.styles.scss'
 
@@ -25,5 +27,17 @@ const Header = ({currentUser}) => {
         </div>
     );
 }
+
+// state la Root Reducer, trong do co user,
+// const mapStateToProps = (state) => ({
+//     currentUser: state.user.currentUser
+// })
+
+// Thay vi viet nhu tren co the viet
+const mapStateToProps = (state) => {
+    return ({
+        currentUser: state.user.currentUser   
+    })
+}
  
-export default Header;
+export default connect(mapStateToProps)(Header);
