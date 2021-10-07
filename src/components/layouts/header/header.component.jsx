@@ -1,3 +1,4 @@
+import React from 'react';
 import { Link } from "react-router-dom";
 // De su dung redux trong component
 import {connect} from 'react-redux'

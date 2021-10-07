@@ -27,6 +27,9 @@ export const selectCollectionsForPreview = createSelector(
 //     )
 // }
 
+// Tại sao phải có cái này, vì thực tế ở trang shop
+// Thì đường dẫn không có params. do đó nó duyệt hết collections với routename trùng với cái trong database thôi
+// Này giống như dạng all-products. mình hay làm
 export const selectCollection = collectionUrlParam =>
   createSelector([selectCollections], collections => {
     return collections.find(collection => {
