@@ -1,5 +1,6 @@
 import React from "react";
 import {Route} from 'react-router-dom'
+import {connect} from 'react-redux'
 
 import CollectionsOverview from "../../components/collections-overview/collections-overview.component";
 import CollectionPage from '../collection/collection.component'
@@ -7,10 +8,16 @@ import CollectionPage from '../collection/collection.component'
 // Do su dung fetch data ở đây nên convert sang class component
 import {firestore,convertCollectionsSnapshotToMap} from '../../firebase/firebase.utils'
 import {collection,onSnapshot} from 'firebase/firestore'
+
+import {updateCollections} from '../../redux/shop/shop.actions'
+
 class ShopPage extends React.Component {
     unsubcribeFromSnapshop = null;
 
     componentDidMount() {
+
+        const {updateCollections} = this.props
+
         // Lấy Collection Rè từ firestore
         const collectionRef = collection(firestore,'collections');
 
@@ -18,6 +25,7 @@ class ShopPage extends React.Component {
 
             const collectionsMap = convertCollectionsSnapshotToMap(querySnapshot);
             console.log(collectionsMap)
+            updateCollections(collectionsMap)
 
             // // Sử dụng cái này để ghi ra dữ liệu là ok rồi
             // querySnapshot.forEach((doc) => {
@@ -48,4 +56,8 @@ class ShopPage extends React.Component {
 //     )
 // }
 
-export default ShopPage;
+const mapDispatchToProps = dispatch => ({
+    updateCollections: collectionsMap => dispatch(updateCollections(collectionsMap))
+})
+
+export default connect(null,mapDispatchToProps)(ShopPage);
