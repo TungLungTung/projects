@@ -16,11 +16,12 @@
     "redux": "4.1.1",
     "redux-logger": "3.0.6",
     "redux-persist": "6.0.0",
-    "reselect": "4.0.0"
+    "reselect": "4.0.0",
+    "styled-components": "^5.3.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "react-scripts start --development",
+    "build": "react-scripts build --production",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "sass": "sass src/Sass:src/Css --watch --no-source-map"
@@ -44,6 +45,7 @@
     ]
   },
   "devDependencies": {
+    "ftp-deploy": "^2.4.1",
     "sass": "^1.42.1"
   }
 }

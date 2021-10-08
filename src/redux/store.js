@@ -9,8 +9,14 @@ import rootReducer from './root-reducer';
 
 // Apply middleware function khi action gui toi reducer
 // Beetween action va root reducer
-const middlewares = [logger];
+const middlewares = [];
+
+if(process.env.NODE_ENV === 'development') {
+    middlewares.push(logger);
+}
+
 export const store = createStore(rootReducer,applyMiddleware(...middlewares));
 
 // Biến persistor lưu trữ reducer store dưới dạng persist
 export const persistor = persistStore(store);
+

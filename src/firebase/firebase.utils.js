@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
+import { getFirestore, doc, getDoc, setDoc, collection, writeBatch } from 'firebase/firestore';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -25,12 +25,30 @@ export const firestore = getFirestore();
 
 // Ham nay tao user neu khach hang dang nhap bang Google
 export const createUserProfileDocument = async (userAuth, additionalData) => {
+
+
+    // collection Snapshot
+    // const collectionRef = firestore.collection('users')
+    // const collectionSnapshot = await collectionRef.get();
+    // console.log(collectionSnapshot)
+
+    // Lay du lieu tu collection
+    // const collectionSnapshot = collection(firestore,"users")
+    // const querySnapshot = await getDocs(collectionSnapshot);
+    // console.log(querySnapshot);
+
+    // querySnapshot.forEach((doc) => {
+    //     // doc.data() is never undefined for query doc snapshots
+    //     console.log(doc.id, " => ", doc.data());
+    //   });
+
     // Neu user chua dang nhap hoac khong tona tai thi ko lam gi
     if (!userAuth) return;
 
     // Khởi tạo và check xem user với cái UID đã log từ Google có tồn tại hay chưa
     // userAuth là cái đăng nhập từ google
     const docUserRef = doc(firestore,'users',`'${userAuth.uid}'`)
+    // Get SnapShot object
     const snapShot = await getDoc(docUserRef);
 
     // Nếu tồn tại thì không làm gì cả
@@ -57,6 +75,39 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
     }
 
     return docUserRef;
+}
+
+
+// Ham the collection to Document
+export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
+    // create colection using collectin Key
+    const collectionRef = collection(firestore,collectionKey);
+    // Add Object len firestore
+    const batch = writeBatch(firestore);
+    objectsToAdd.forEach(obj => {
+        // Add a new document to collection
+        batch.set(doc(collectionRef),obj)
+        // const newDocumentRef = collectionRef.doc();
+    })
+    return await batch.commit();
+}
+
+// Ham convertCollectionSnaption -> Array
+export const convertCollectionsSnapshotToMap = (collections) => {
+    const tranformedCollection = collections.docs.map(doc => {
+        const {title,items} = doc.data();
+        return ({
+            id: doc.id,
+            routeName: encodeURI(title.toLowerCase()),
+            title,
+            items
+        });
+    });
+    // Lúc này tranfromedCollection là kiểu array [{…}, {…}, {…}, {…}, {…}]11
+    return tranformedCollection.reduce((accumulator, collection) => {
+        accumulator[collection.title.toLowerCase()] = collection;
+        return accumulator;
+    }, {})
 }
 
 const provider = new GoogleAuthProvider();

@@ -11,9 +11,13 @@ export const selectCollections = createSelector(
 export const selectCollectionsForPreview = createSelector(
     [selectCollections],
     // Get all keys of objects
-    collections => Object.keys(collections).map(key => {
-        return collections[key]
-    })
+    // collections => Object.keys(collections).map(key => {
+    //     return collections[key]
+    // })
+
+    (collections) =>
+    collections ? Object.keys(collections).map((key) => collections[key]) : []
+
 )
 
 // Select Collection ID
