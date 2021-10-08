@@ -22,24 +22,26 @@ export const selectCollectionsForPreview = createSelector(
 
 // Select Collection ID
 // Function return a function
-// export const selectCollection = collectionUrlParam => {
-//     return (
-//         createSelector(
-//             [selectCollections],
-//             collections => collections[collectionUrlParam]
-//         )
-//     )
-// }
+export const selectCollection = collectionUrlParam => {
+    return (
+        createSelector(
+            [selectCollections],
+            collections =>
+            (collections ? collections[collectionUrlParam] : null)
+        )
+    )
+}
 
 // Tại sao phải có cái này, vì thực tế ở trang shop
 // Thì đường dẫn không có params. do đó nó duyệt hết collections với routename trùng với cái trong database thôi
 // Này giống như dạng all-products. mình hay làm
-export const selectCollection = collectionUrlParam =>
-  createSelector([selectCollections], collections => {
-    return collections.find(collection => {
-      return collection.routeName === collectionUrlParam
-    })
-  });
+
+// export const selectCollection = collectionUrlParam =>
+//   createSelector([selectCollections], collections => {
+//     return collections.find(collection => {
+//       return collection.routeName === collectionUrlParam
+//     })
+//   });
 
 // export const selectCollection = memoize(collectionUrlParam => {
 //     return createSelector(
