@@ -3,9 +3,9 @@ import {Route} from 'react-router-dom'
 import {connect} from 'react-redux'
 
 import {firestore,convertCollectionsSnapshotToMap} from '../../firebase/firebase.utils'
-import {collection,onSnapshot} from 'firebase/firestore'
+import {collection,onSnapshot,getDocs} from 'firebase/firestore'
 
-import WithSpinner from "../../components/with-spinner/with-spinner.component";
+import withSpinner from "../../components/with-spinner/with-spinner.component";
 
 
 import CollectionsOverview from "../../components/collections-overview/collections-overview.component";
@@ -14,8 +14,8 @@ import CollectionPage from '../collection/collection.component'
 import {updateCollections} from '../../redux/shop/shop.actions'
 
 // HOC
-const CollectionOverviewWithSpinner = WithSpinner(CollectionsOverview);
-const CollectionPageWithSpinner = WithSpinner(CollectionPage)
+const CollectionOverviewWithSpinner = withSpinner(CollectionsOverview);
+const CollectionPageWithSpinner = withSpinner(CollectionPage)
 
 class ShopPage extends React.Component {
     state = {
@@ -23,18 +23,36 @@ class ShopPage extends React.Component {
     }
     unsubcribeFromSnapshop = null;
     componentDidMount() {
-
         const {updateCollections} = this.props
 
         // Lấy Collection Rè từ firestore
         const collectionRef = collection(firestore,'collections');
 
-        onSnapshot(collectionRef, (querySnapshot) => {
-            const collectionsMap = convertCollectionsSnapshotToMap(querySnapshot);
-            updateCollections(collectionsMap);
-            this.setState({loading: false})
-        })
-         
+        // fetch('https://firestore.googleapis.com/v1/projects/shop-51e6e/databases/(default)/documents/collections')
+        //     .then(res => res.json())
+        //     .then(collections => console.log(collections))
+            
+        // Cach dung Promise
+        this.unsubcribeFromSnapshop = getDocs(collectionRef).then(
+            querySnapshot => {
+                const collectionsMap = convertCollectionsSnapshotToMap(querySnapshot);
+                updateCollections(collectionsMap);
+                // Set loading is false
+                this.setState({loading: false})   
+            }
+        )
+
+        // this.unsubcribeFromSnapshop = onSnapshot(collectionRef, (querySnapshot) => {
+        //     const collectionsMap = convertCollectionsSnapshotToMap(querySnapshot);
+        //     updateCollections(collectionsMap);
+
+        //     // Set loading is false
+        //     this.setState({loading: false})
+        // })  
+    }
+
+    componentWillUnmount() {
+        this.unsubcribeFromSnapshop();
     }
 
     render() {

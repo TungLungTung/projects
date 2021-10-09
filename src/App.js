@@ -12,6 +12,7 @@ import ShopPage from './pages/shop/shop.components'
 import Header from './components/layouts/header/header.component';
 import SignInAndSignUpPage from './pages/account/auth/sign-in-and-sign-up.component';
 import CheckoutPage from './pages/checkout/checkout.component';
+import HighOrderComponent from './components/high-order-component/high-order-component.component';
 
 import { auth, createUserProfileDocument } from './firebase/firebase.utils'
 import { onSnapshot } from "firebase/firestore";
@@ -22,15 +23,6 @@ import { selectCurrentUser } from './redux/user/user.selectors'
 // Them du lieu 1 lan vao selector
 
 class App extends React.Component {
-
-  // // Neu su dung redux thi khong can state o constructoer nua
-  // constructor() {
-  //   super();
-  //   this.state = {
-  //     currentUser: null
-  //   }
-  // }
-
   // De bo chon cai Auth khi thoat
   unsubscribeFromAuth = null;
   unsub = null
@@ -66,8 +58,6 @@ class App extends React.Component {
     this.unsubscribeFromAuth();
   }
 
-
-
   render() {
     // const {currentUser} = this.state;
     // console.log(currentUser);
@@ -81,6 +71,7 @@ class App extends React.Component {
           <Route exact path='/' component={HomePage} />
           <Route path='/shop' component={ShopPage} />
           <Route exact path='/checkout' component={CheckoutPage} />
+          <Route exact path='/hoc' component={HighOrderComponent} />
           <Route
             exact
             path='/signin'
