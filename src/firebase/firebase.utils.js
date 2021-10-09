@@ -26,22 +26,6 @@ export const firestore = getFirestore();
 // Ham nay tao user neu khach hang dang nhap bang Google
 export const createUserProfileDocument = async (userAuth, additionalData) => {
 
-
-    // collection Snapshot
-    // const collectionRef = firestore.collection('users')
-    // const collectionSnapshot = await collectionRef.get();
-    // console.log(collectionSnapshot)
-
-    // Lay du lieu tu collection
-    // const collectionSnapshot = collection(firestore,"users")
-    // const querySnapshot = await getDocs(collectionSnapshot);
-    // console.log(querySnapshot);
-
-    // querySnapshot.forEach((doc) => {
-    //     // doc.data() is never undefined for query doc snapshots
-    //     console.log(doc.id, " => ", doc.data());
-    //   });
-
     // Neu user chua dang nhap hoac khong tona tai thi ko lam gi
     if (!userAuth) return;
 
@@ -110,6 +94,6 @@ export const convertCollectionsSnapshotToMap = (collections) => {
     }, {})
 }
 
-const provider = new GoogleAuthProvider();
-provider.setCustomParameters({ params: 'select_account' });
-export const signInWithGoogle = () => signInWithPopup(auth, provider);
+export const googleProvider = new GoogleAuthProvider();
+googleProvider.setCustomParameters({ params: 'select_account' });
+export const signInWithGoogle = () => signInWithPopup(auth, googleProvider);

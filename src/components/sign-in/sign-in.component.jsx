@@ -1,9 +1,12 @@
 import React  from 'react';
+import {connect} from 'react-redux'
 import FormInput from '../form-input/form-input.component'
 import CustomButton from "../custom-button/custom-button.component";
-import { signInWithGoogle } from '../../firebase/firebase.utils.js'
-import { auth } from '../../firebase/firebase.utils'
-import { signInWithEmailAndPassword } from "firebase/auth";
+// import { signInWithGoogle } from '../../firebase/firebase.utils.js'
+// import { auth } from '../../firebase/firebase.utils'
+// import { signInWithEmailAndPassword } from "firebase/auth";
+
+import {googleSignInStart, emailSignInStart} from '../../redux/user/user.actions'
 
 class SignIn extends React.Component {
     constructor(props) {
@@ -17,18 +20,22 @@ class SignIn extends React.Component {
     handleSubmit = async (event) => {
         event.preventDefault();
 
+        const {emailSignInStart} = this.props;
         const {email,password} = this.state;
-        await signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                // Signed in 
-                const user = userCredential.user;
-                // ...
-                console.log(user);
-              })
-              .catch((error) => {
-                console.log(error.message)
-              });
-        this.setState({ email: '', password: '' })
+
+        emailSignInStart(email,password)
+
+        // await signInWithEmailAndPassword(auth, email, password)
+        //     .then((userCredential) => {
+        //         // Signed in 
+        //         const user = userCredential.user;
+        //         // ...
+        //         console.log(user);
+        //       })
+        //       .catch((error) => {
+        //         console.log(error.message)
+        //       });
+        // this.setState({ email: '', password: '' })
     }
 
     handleChange = (event) => {
@@ -37,7 +44,7 @@ class SignIn extends React.Component {
     }
 
     render() {
-
+        const {googleSignInStart} = this.props;
         return (
             <div className="sign-in">
                 <h2>or Sign in with your exist account</h2>
@@ -63,7 +70,7 @@ class SignIn extends React.Component {
                     {/* Co the dung children props la nhung cai ben trong cua Component */}
                     <div className='sign-in-button-holder'>
                         <CustomButton onClick={this.handleSubmit} type='submit' value='Sign in' />
-                        <CustomButton onClick={signInWithGoogle} value='Login with Google' btnGoogleSignIn='true' />
+                        <CustomButton type='button' onClick={googleSignInStart} value='Login with Google' btnGoogleSignIn='true' />
                     </div>
                 </form>
             </div>
@@ -76,4 +83,9 @@ class SignIn extends React.Component {
 
 }
 
-export default SignIn;
+const mapDispatchToProps = dispatch => ({
+    googleSignInStart: () => dispatch(googleSignInStart()),
+    emailSignInStart: (email,password) => dispatch(emailSignInStart({email,password}))
+})
+
+export default connect(null,mapDispatchToProps)(SignIn);

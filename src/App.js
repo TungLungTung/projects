@@ -14,8 +14,8 @@ import SignInAndSignUpPage from './pages/account/auth/sign-in-and-sign-up.compon
 import CheckoutPage from './pages/checkout/checkout.component';
 import HighOrderComponent from './components/high-order-component/high-order-component.component';
 
-import { auth, createUserProfileDocument } from './firebase/firebase.utils'
-import { onSnapshot } from "firebase/firestore";
+// import { auth, createUserProfileDocument } from './firebase/firebase.utils'
+// import { onSnapshot } from "firebase/firestore";
 
 // Redux
 import { setCurrentUser } from './redux/user/user.actions'
@@ -33,25 +33,25 @@ class App extends React.Component {
     // Redux
     const { setCurrentUser } = this.props;
 
-    // Kiểm tra user đăng nhập bằng Google userAuth
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
-      // Truong hop co ton tai
-      if (userAuth) {
-        // Lay userRef nhan userRef tra ve tu ham Create
-        const userRef = await createUserProfileDocument(userAuth);
-        // Kiem tra snapshot va ghi du lieu
-        this.unsub = onSnapshot(userRef, (doc) => {
-          setCurrentUser({
-            id: doc.id,
-            ...doc.data()
-          }, () => {
-            // console.log('Current User',this.state.currentUser)
-          });
-        });
-      } 
+    // // Kiểm tra user đăng nhập bằng Google userAuth
+    // this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+    //   // Truong hop co ton tai
+    //   if (userAuth) {
+    //     // Lay userRef nhan userRef tra ve tu ham Create
+    //     const userRef = await createUserProfileDocument(userAuth);
+    //     // Kiem tra snapshot va ghi du lieu
+    //     this.unsub = onSnapshot(userRef, (doc) => {
+    //       setCurrentUser({
+    //         id: doc.id,
+    //         ...doc.data()
+    //       }, () => {
+    //         // console.log('Current User',this.state.currentUser)
+    //       });
+    //     });
+    //   }
 
-      setCurrentUser(userAuth);
-    })
+    //   setCurrentUser(userAuth);
+    // })
   }
 
   componentWillUnmount() {
