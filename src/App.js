@@ -14,11 +14,13 @@ import SignInAndSignUpPage from './pages/account/auth/sign-in-and-sign-up.compon
 import CheckoutPage from './pages/checkout/checkout.component';
 import HighOrderComponent from './components/high-order-component/high-order-component.component';
 
+import {checkUserSession} from './redux/user/user.actions'
+
 // import { auth, createUserProfileDocument } from './firebase/firebase.utils'
 // import { onSnapshot } from "firebase/firestore";
 
 // Redux
-import { setCurrentUser } from './redux/user/user.actions'
+// import { setCurrentUser } from './redux/user/user.actions'
 import { selectCurrentUser } from './redux/user/user.selectors'
 // Them du lieu 1 lan vao selector
 
@@ -30,8 +32,12 @@ class App extends React.Component {
   // FetchDate on Mount
   componentDidMount() {
 
+    const {checkUserSession} = this.props;
+    checkUserSession();
+
+
     // Redux
-    const { setCurrentUser } = this.props;
+    // const { setCurrentUser } = this.props;
 
     // // Kiểm tra user đăng nhập bằng Google userAuth
     // this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
@@ -98,12 +104,11 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser,
 })
 
-const mapDispatchProps = dispatch => ({
-  setCurrentUser: user => dispatch(setCurrentUser(user))
+const mapDispatchToProps = dispatch => ({
+  checkUserSession: () => dispatch(checkUserSession())
 })
-
 
 export default connect(
   mapStateToProps,
-  mapDispatchProps
+  mapDispatchToProps
 )(App);
